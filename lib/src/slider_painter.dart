@@ -35,19 +35,23 @@ class SliderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     _center = Offset(size.width / 2, size.height / 2);
-    _radius = min(size.width / 2, size.height / 2) - sliderDecorator.sweepDecoration.sliderStrokeWidth;
+    _radius = min(size.width / 2, size.height / 2) -
+        sliderDecorator.sweepDecoration.sliderStrokeWidth;
 
-    sliderDecorator.sweepDecoration.paint(canvas, size, center, startAngle, sweepAngle);
+    sliderDecorator.sweepDecoration
+        .paint(canvas, size, center, startAngle, sweepAngle);
 
     // draw start handler
     if (mode == CircularSliderMode.doubleHandler) {
       _initHandler = radiansToCoordinates(center, -pi / 2 + startAngle, radius);
-      sliderDecorator.initHandlerDecoration?.paint(canvas, initHandlerCenterLocation);
+      sliderDecorator.initHandlerDecoration
+          ?.paint(canvas, initHandlerCenterLocation);
     }
-    
+
     // draw end handler
     _endHandler = radiansToCoordinates(center, -pi / 2 + endAngle, radius);
-    sliderDecorator.endHandlerDecoration?.paint(canvas, endHandlerCenterLocation);
+    sliderDecorator.endHandlerDecoration
+        ?.paint(canvas, endHandlerCenterLocation);
   }
 
   @override
