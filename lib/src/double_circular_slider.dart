@@ -85,18 +85,16 @@ class DoubleCircularSlider extends StatefulWidget {
 class _DoubleCircularSliderState extends State<DoubleCircularSlider> {
   int _init;
   int _end;
-  
+
   @override
   void initState() {
     super.initState();
 
     _init = widget.init % widget.divisions;
     _end = widget.end % widget.divisions;
-
   }
 
-  CircularSliderDecoration getDefaultSliderDecorator()
-  {
+  CircularSliderDecoration getDefaultSliderDecorator() {
     var dBox = CircularSliderHandlerDecoration(
       color: Colors.lightBlue[900].withOpacity(0.8),
       shape: BoxShape.circle,
@@ -107,21 +105,16 @@ class _DoubleCircularSliderState extends State<DoubleCircularSlider> {
     var iBox = dBox.copyWith();
 
     var sweepDecoration = CircularSliderSweepDecoration(
-      sliderStrokeWidth: 12, 
-      gradient: new SweepGradient(
-        startAngle: 3 * pi / 2,
-        endAngle: 7 * pi / 2,
-        tileMode: TileMode.repeated,
-        colors: [Colors.blue.withOpacity(0.8), Colors.red.withOpacity(0.8)],
-      )
-    );
-    
+        sliderStrokeWidth: 12,
+        gradient: new SweepGradient(
+          startAngle: 3 * pi / 2,
+          endAngle: 7 * pi / 2,
+          tileMode: TileMode.repeated,
+          colors: [Colors.blue.withOpacity(0.8), Colors.red.withOpacity(0.8)],
+        ));
+
     var prdDD = CircularSliderDeviderDecoration(
-      color: Colors.blue[200],
-      width: 2,
-      size: 11,
-      useRoundedCap: false
-    );
+        color: Colors.blue[200], width: 2, size: 11, useRoundedCap: false);
 
     var sdnDD = CircularSliderDeviderDecoration(
       color: Colors.lightBlue.withOpacity(0.5),
@@ -131,13 +124,13 @@ class _DoubleCircularSliderState extends State<DoubleCircularSlider> {
 
     var clock = CircularSliderClockNumberDecoration();
 
-    return CircularSliderDecoration(
-      sweepDecoration, 
-      clockNumberDecoration:  clock,
-      baseColor: Colors.lightBlue[200].withOpacity(0.2),
-      mainDeviderDecoration: prdDD,
-      secondDeviderDecoration: sdnDD,
-      endHandlerDecoration: dBox, initHandlerDecoration: iBox);
+    return CircularSliderDecoration(sweepDecoration,
+        clockNumberDecoration: clock,
+        baseColor: Colors.lightBlue[200].withOpacity(0.2),
+        mainDeviderDecoration: prdDD,
+        secondDeviderDecoration: sdnDD,
+        endHandlerDecoration: dBox,
+        initHandlerDecoration: iBox);
   }
 
   @override

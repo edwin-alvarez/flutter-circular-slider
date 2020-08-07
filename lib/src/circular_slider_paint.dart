@@ -1,14 +1,11 @@
-import 'dart:isolate';
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'base_painter.dart';
-import 'slider_painter.dart';
-import 'utils.dart';
 import 'circular_slider_decoration.dart';
 import 'circular_slider_validator.dart';
+import 'slider_painter.dart';
+import 'utils.dart';
 
 enum CircularSliderMode { singleHandler, doubleHandler }
 
@@ -28,7 +25,7 @@ class CircularSliderPaint extends StatefulWidget {
   final Widget child;
   final bool shouldCountLaps;
   final CircularSliderDecoration sliderDecoration;
-  MinMaxAngleValidator minmaxValidator;
+  final MinMaxAngleValidator minmaxValidator;
 
   CircularSliderPaint({
     @required this.mode,
@@ -54,7 +51,7 @@ class _CircularSliderState extends State<CircularSliderPaint> {
   bool _isEndHandlerSelected = false;
 
   SliderPainter _painter;
-  
+
   //this field will allow us to keep track of the last known good location for endhandler
   //it helps to fix issue when using MIN/MAX values and the slider is sweep across the total divisions
   int lastValidEndHandlerLocation;
@@ -117,10 +114,10 @@ class _CircularSliderState extends State<CircularSliderPaint> {
         CustomPanGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<CustomPanGestureRecognizer>(
           () => CustomPanGestureRecognizer(
-                onPanDown: _onPanDown,
-                onPanUpdate: _onPanUpdate,
-                onPanEnd: _onPanEnd,
-              ),
+            onPanDown: _onPanDown,
+            onPanUpdate: _onPanUpdate,
+            onPanEnd: _onPanEnd,
+          ),
           (CustomPanGestureRecognizer instance) {},
         ),
       },
@@ -129,7 +126,8 @@ class _CircularSliderState extends State<CircularSliderPaint> {
           decoration: widget.sliderDecoration,
           primarySectors: widget.primarySectors,
           secondarySectors: widget.secondarySectors,
-          sliderStrokeWidth: widget.sliderDecoration.sweepDecoration.sliderStrokeWidth,
+          sliderStrokeWidth:
+              widget.sliderDecoration.sweepDecoration.sliderStrokeWidth,
         ),
         foregroundPainter: _painter,
         child: Padding(
@@ -178,12 +176,11 @@ class _CircularSliderState extends State<CircularSliderPaint> {
     }
 
     _painter = SliderPainter(
-      mode: widget.mode,
-      startAngle: _startAngle,
-      endAngle: _endAngle,
-      sweepAngle: _sweepAngle,
-      sliderDecorator : widget.sliderDecoration
-    );
+        mode: widget.mode,
+        startAngle: _startAngle,
+        endAngle: _endAngle,
+        sweepAngle: _sweepAngle,
+        sliderDecorator: widget.sliderDecoration);
   }
 
   int _calculateLapsForsSingleHandler(
@@ -249,30 +246,31 @@ class _CircularSliderState extends State<CircularSliderPaint> {
     var percentage = radiansToPercentage(angle);
     var newValue = percentageToValue(percentage, widget.divisions);
 
-  
     if (isBothHandlersSelected) {
-      var newValueInit = (newValue - _differenceFromInitPoint) % widget.divisions;
+      var newValueInit =
+          (newValue - _differenceFromInitPoint) % widget.divisions;
       if (newValueInit != widget.init) {
-        var newValueEnd = (widget.end + (newValueInit - widget.init)) % widget.divisions;
+        var newValueEnd =
+            (widget.end + (newValueInit - widget.init)) % widget.divisions;
 
         ///call our minmaxValidator then configure to make sure the handler are not drag to a invalid angle
         var ruleRes = widget.minmaxValidator?.validateSweepDrag(
-          initialIniHndLoc: widget.init, 
-          lastValidIniLoc: lastValidIniHandlerLocation, 
-          newIniValue: newValueInit,
-          initialEndHndLoc: widget.end, 
-          lastValidEndLoc: lastValidEndHandlerLocation, 
-          newEndValue: newValueEnd,
-          tLaps: _laps, 
-          onSelectionChange: widget.onSelectionChange);
+            initialIniHndLoc: widget.init,
+            lastValidIniLoc: lastValidIniHandlerLocation,
+            newIniValue: newValueInit,
+            initialEndHndLoc: widget.end,
+            lastValidEndLoc: lastValidEndHandlerLocation,
+            newEndValue: newValueEnd,
+            tLaps: _laps,
+            onSelectionChange: widget.onSelectionChange);
 
-        if(ruleRes != null && !ruleRes)
-          return;
+        if (ruleRes != null && !ruleRes) return;
 
         lastValidIniHandlerLocation = newValueInit;
         lastValidEndHandlerLocation = newValueEnd;
 
-        print("lastValidIniHandlerLocation:$lastValidIniHandlerLocation lastValidEndHandlerLocation: $lastValidEndHandlerLocation");
+        print(
+            "lastValidIniHandlerLocation:$lastValidIniHandlerLocation lastValidEndHandlerLocation: $lastValidEndHandlerLocation");
 
         widget.onSelectionChange(newValueInit, newValueEnd, _laps);
         if (isPanEnd) {
@@ -281,13 +279,17 @@ class _CircularSliderState extends State<CircularSliderPaint> {
       }
       return;
     }
-    
+
     // isDoubleHandler but one handler was selected
     if (_isInitHandlerSelected) {
       ///call our minmaxValidator then configure to make sure the handler are not drag to a invalid angle
-      var ruleRes = widget.minmaxValidator?.validateIniHandler(newValue, widget.end, lastValidIniHandlerLocation,  _laps, widget.onSelectionChange);
-      if(ruleRes != null && !ruleRes)
-        return;
+      var ruleRes = widget.minmaxValidator?.validateIniHandler(
+          newValue,
+          widget.end,
+          lastValidIniHandlerLocation,
+          _laps,
+          widget.onSelectionChange);
+      if (ruleRes != null && !ruleRes) return;
 
       lastValidIniHandlerLocation = newValue;
       widget.onSelectionChange(newValue, widget.end, _laps);
@@ -296,9 +298,13 @@ class _CircularSliderState extends State<CircularSliderPaint> {
       }
     } else {
       ///call our minmaxValidator then configure to make sure the handler are not drag to a invalid angle
-      var ruleRes = widget.minmaxValidator?.validateEndHandler(newValue, widget.init, lastValidEndHandlerLocation, _laps, widget.onSelectionChange);
-      if(ruleRes != null && !ruleRes)
-        return;
+      var ruleRes = widget.minmaxValidator?.validateEndHandler(
+          newValue,
+          widget.init,
+          lastValidEndHandlerLocation,
+          _laps,
+          widget.onSelectionChange);
+      if (ruleRes != null && !ruleRes) return;
 
       lastValidEndHandlerLocation = newValue;
       widget.onSelectionChange(widget.init, newValue, _laps);
@@ -327,11 +333,15 @@ class _CircularSliderState extends State<CircularSliderPaint> {
       }
     } else {
       _isInitHandlerSelected = isPointInsideCircle(
-          position, _painter.initHandlerCenterLocation, widget.sliderDecoration.initHandlerDecoration.handlerOutterRadius);
+          position,
+          _painter.initHandlerCenterLocation,
+          widget.sliderDecoration.initHandlerDecoration.handlerOutterRadius);
 
       if (!_isInitHandlerSelected) {
         _isEndHandlerSelected = isPointInsideCircle(
-            position, _painter.endHandlerCenterLocation, widget.sliderDecoration.endHandlerDecoration.handlerOutterRadius);
+            position,
+            _painter.endHandlerCenterLocation,
+            widget.sliderDecoration.endHandlerDecoration.handlerOutterRadius);
       }
 
       if (isNoHandlersSelected) {

@@ -138,9 +138,7 @@ class _SingleCircularSliderState extends State<SingleCircularSlider> {
         ));
   }
 
-
-  CircularSliderDecoration getDefaultSliderDecorator()
-  {
+  CircularSliderDecoration getDefaultSliderDecorator() {
     var dBox = CircularSliderHandlerDecoration(
       color: Colors.lightBlue[900].withOpacity(0.8),
       shape: BoxShape.circle,
@@ -149,21 +147,16 @@ class _SingleCircularSliderState extends State<SingleCircularSlider> {
     );
 
     var sweepDecoration = CircularSliderSweepDecoration(
-      sliderStrokeWidth: 12, 
-      gradient: new SweepGradient(
-        startAngle: 3 * pi / 2,
-        endAngle: 7 * pi / 2,
-        tileMode: TileMode.repeated,
-        colors: [Colors.blue.withOpacity(0.8), Colors.red.withOpacity(0.8)],
-      )
-    );
-    
+        sliderStrokeWidth: 12,
+        gradient: new SweepGradient(
+          startAngle: 3 * pi / 2,
+          endAngle: 7 * pi / 2,
+          tileMode: TileMode.repeated,
+          colors: [Colors.blue.withOpacity(0.8), Colors.red.withOpacity(0.8)],
+        ));
+
     var prdDD = CircularSliderDeviderDecoration(
-      color: Colors.blue,
-      width: 3,
-      size: 10,
-      useRoundedCap: false
-    );
+        color: Colors.blue, width: 3, size: 10, useRoundedCap: false);
 
     var sdnDD = prdDD.copyWith(
       width: 1,
@@ -171,10 +164,11 @@ class _SingleCircularSliderState extends State<SingleCircularSlider> {
     );
 
     return CircularSliderDecoration(
-      sweepDecoration, 
+      sweepDecoration,
       baseColor: Colors.lightBlue[200].withOpacity(0.2),
       mainDeviderDecoration: prdDD,
       secondDeviderDecoration: sdnDD,
-      endHandlerDecoration: dBox, );
+      endHandlerDecoration: dBox,
+    );
   }
 }
